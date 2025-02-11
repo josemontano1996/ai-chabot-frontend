@@ -20,10 +20,10 @@ const ChatPage = () => {
 
   const submitForm: SubmitHandler<FormFields> = async (data) => {
     try {
+      console.log(data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       throw new Error();
-      console.log(data);
-    } catch (e) {
+    } catch {
       setError('root', {
         message: 'An error ocurred',
       });
