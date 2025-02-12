@@ -2,7 +2,7 @@ import { Navigate, Route } from 'react-router';
 import { Routes } from 'react-router';
 import { BrowserRouter } from 'react-router';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import ChatPage from './pages/public/ChatPage';
+import ChatPage from './pages/public/ChatPage/ChatPage';
 
 export const AppRouter = () => {
   return (

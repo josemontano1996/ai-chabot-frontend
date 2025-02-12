@@ -1,4 +1,5 @@
-import { useAppStore } from '@/store/AppStore';
+import { useWebSocketStore } from '@/store/WsStore';
+import { TChatWebSocket } from '@/types/websockets';
 import { useCallback, useEffect, useRef } from 'react';
 
 interface Args<T> {
@@ -16,57 +17,55 @@ export function useWebSocket<T>({
   onOpen,
   onClose,
 }: Args<T>): {
-  ws: React.RefObject<WebSocket | null>;
+  ws: TChatWebSocket;
 } {
   const ws = useRef<WebSocket | null>(null);
-  const setIsLoadingStore = useAppStore((state) => state.setIsLoading);
-  
+  const { setIsLoading, setIsConnected } = useWebSocketStore();
+
   // Create a closure that encapsulates WebSocket logic
   const createWebSocketHandler = useCallback(() => {
-    setIsLoadingStore(true);
     // This closure will have access to the `onMessage`, `onError`, `onOpen`, and `onClose` callbacks
     return () => {
       ws.current = new WebSocket(wsAddress);
 
       ws.current.onopen = () => {
         console.log('Connected to WebSocket server');
-        setIsLoadingStore(false);
+        setIsConnected(true);
         if (onOpen) {
           onOpen();
         }
       };
 
       ws.current.onmessage = (event) => {
-        console.log('Raw message from server:', event.data); // Log the raw message
         try {
-          const data = JSON.parse(event.data) as T; // Parse the WebSocket message
-          onMessage(data); // Call the callback with the parsed message
+          setIsLoading(true);
+          const data = JSON.parse(event.data) as T;
+          onMessage(data);
         } catch (error) {
           console.error('Error parsing WebSocket message:', error); // Log parsing errors
           if (onError) {
             onError(error);
           }
         } finally {
-          setIsLoadingStore(false);
+          setIsLoading(false);
         }
       };
 
       ws.current.onerror = (error) => {
+        setIsConnected(false);
         if (onError) {
           onError(error);
         }
-        setIsLoadingStore(false);
       };
 
       ws.current.onclose = (event) => {
+        setIsConnected(false);
         console.log(
           'Disconnected from WebSocket server',
           event.code,
           event.reason
         );
         ws.current = null;
-        setIsLoadingStore(true);
-
         if (onClose) {
           onClose(event);
         }
@@ -76,7 +75,7 @@ export function useWebSocket<T>({
         }
       };
     };
-  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoadingStore]);
+  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoading, setIsConnected]);
 
   // Initialize WebSocket connection
   useEffect(() => {

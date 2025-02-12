@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
 interface AppStore {
-  isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
+  error: string;
+  setError: (error: string) => void;
+  clearError: () => void;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
-  isLoading: false,
-  setIsLoading: (isLoading: boolean) => set({ isLoading }),
+  error: '',
+  setError: (newError: string) => set({ error: newError }),
+  clearError: () => set({ error: '' }),
 }));
