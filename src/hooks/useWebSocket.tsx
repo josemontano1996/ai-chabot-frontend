@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store/AppStore';
+import { useWebSocketStore } from '@/store/WsStore';
 import { useCallback, useEffect, useRef } from 'react';
 
 interface Args<T> {
@@ -9,6 +9,8 @@ interface Args<T> {
   onClose?: (event: CloseEvent) => void;
 }
 
+export type TChatWebSocket = React.RefObject<WebSocket | null>;
+
 export function useWebSocket<T>({
   wsAddress,
   onMessage,
@@ -16,21 +18,21 @@ export function useWebSocket<T>({
   onOpen,
   onClose,
 }: Args<T>): {
-  ws: React.RefObject<WebSocket | null>;
+  ws: TChatWebSocket;
 } {
   const ws = useRef<WebSocket | null>(null);
-  const setIsLoadingStore = useAppStore((state) => state.setIsLoading);
-  
+  const { setIsLoading } = useWebSocketStore();
+
   // Create a closure that encapsulates WebSocket logic
   const createWebSocketHandler = useCallback(() => {
-    setIsLoadingStore(true);
+    setIsLoading(true);
     // This closure will have access to the `onMessage`, `onError`, `onOpen`, and `onClose` callbacks
     return () => {
       ws.current = new WebSocket(wsAddress);
 
       ws.current.onopen = () => {
         console.log('Connected to WebSocket server');
-        setIsLoadingStore(false);
+        setIsLoading(false);
         if (onOpen) {
           onOpen();
         }
@@ -47,7 +49,7 @@ export function useWebSocket<T>({
             onError(error);
           }
         } finally {
-          setIsLoadingStore(false);
+          setIsLoading(false);
         }
       };
 
@@ -55,7 +57,7 @@ export function useWebSocket<T>({
         if (onError) {
           onError(error);
         }
-        setIsLoadingStore(false);
+        setIsLoading(false);
       };
 
       ws.current.onclose = (event) => {
@@ -65,7 +67,7 @@ export function useWebSocket<T>({
           event.reason
         );
         ws.current = null;
-        setIsLoadingStore(true);
+        setIsLoading(true);
 
         if (onClose) {
           onClose(event);
@@ -76,7 +78,7 @@ export function useWebSocket<T>({
         }
       };
     };
-  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoadingStore]);
+  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoading]);
 
   // Initialize WebSocket connection
   useEffect(() => {
