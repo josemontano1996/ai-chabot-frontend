@@ -5,6 +5,7 @@ import { ChatMessage, useChatStore } from '../../store/ChatStore';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useAppStore } from '@/store/AppStore';
 import { useCallback } from 'react';
+import { Button } from '@/components/ui/button';
 
 const schema = z.object({
   message: z.string().min(1, 'Message is required.'),
@@ -69,13 +70,13 @@ const ChatPage = () => {
           {errors.message && (
             <span className="text-red-500">{errors.message.message}</span>
           )}
-          <button
+          <Button
             disabled={isLoading}
             type="submit"
             className="bg-green-600 px-2 py-1 rounded-md hover:cursor-pointer"
           >
             {isLoading ? 'Loading' : 'Send'}
-          </button>
+          </Button>
           {errors.root && (
             <span className="text-red-500">{errors.root.message}</span>
           )}
