@@ -15,6 +15,8 @@ import { TChatWebSocket } from '@/types/websockets';
 import { Button } from '@/components/shadcn/button';
 import { IChatMessage } from '@/types/chat';
 import { useChatMessagesStore } from '@/store/ChatMessagesStore';
+import { SendHorizonal } from 'lucide-react';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 const formSchema = z.object({
   message: z.string().min(1, 'Message is required.'),
 });
@@ -41,13 +43,13 @@ const ChatForm = ({ ws }: Props) => {
         message: values.message,
         type: 1,
       };
-      
+
       appendMessage(message);
-      
+
       setTimeout(() => {
-           if (ws.current) {
-             ws.current.send(JSON.stringify(message));
-           }
+        if (ws.current) {
+          ws.current.send(JSON.stringify(message));
+        }
       }, 5000);
       // if (ws.current) {
       //  ws.current.send(JSON.stringify(message));
@@ -59,23 +61,43 @@ const ChatForm = ({ ws }: Props) => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" disabled={!isConnected || isLoading}>
-          Send
-        </Button>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+        <div className="flex items-center justify-between border rounded-full">
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder={
+                      !isConnected
+                        ? 'Connecting to server...'
+                        : 'Type a message'
+                    }
+                    {...field}
+                    className="border-0 rounded-full  focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div>
+            <Button
+              variant={'secondary'}
+              type="submit"
+              disabled={!isConnected || isLoading}
+              className="rounded-full m-1 p-3"
+            >
+              {!isConnected || isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <SendHorizonal />
+              )}
+            </Button>
+          </div>
+        </div>
       </form>
     </Form>
   );

@@ -11,13 +11,13 @@ export const MessagesDisplay = () => {
       {messages.map((message, i) => {
         if (message.type > 0) {
           return (
-            <li key={i} className="text-right">
+            <li key={i} className="text-right italic">
               {message.message}
             </li>
           );
         } else {
           return (
-            <li key={i} className="text-left">
+            <li key={i} className="text-left bg-muted px-2 py-2 rounded-md">
               {message.message}
             </li>
           );
