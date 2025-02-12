@@ -10,8 +10,6 @@ interface Args<T> {
   onClose?: (event: CloseEvent) => void;
 }
 
-
-
 export function useWebSocket<T>({
   wsAddress,
   onMessage,
@@ -22,28 +20,27 @@ export function useWebSocket<T>({
   ws: TChatWebSocket;
 } {
   const ws = useRef<WebSocket | null>(null);
-  const { setIsLoading } = useWebSocketStore();
+  const { setIsLoading, setIsConnected } = useWebSocketStore();
 
   // Create a closure that encapsulates WebSocket logic
   const createWebSocketHandler = useCallback(() => {
-    setIsLoading(true);
     // This closure will have access to the `onMessage`, `onError`, `onOpen`, and `onClose` callbacks
     return () => {
       ws.current = new WebSocket(wsAddress);
 
       ws.current.onopen = () => {
         console.log('Connected to WebSocket server');
-        setIsLoading(false);
+        setIsConnected(true);
         if (onOpen) {
           onOpen();
         }
       };
 
       ws.current.onmessage = (event) => {
-        console.log('Raw message from server:', event.data); // Log the raw message
         try {
-          const data = JSON.parse(event.data) as T; // Parse the WebSocket message
-          onMessage(data); // Call the callback with the parsed message
+          setIsLoading(true);
+          const data = JSON.parse(event.data) as T;
+          onMessage(data);
         } catch (error) {
           console.error('Error parsing WebSocket message:', error); // Log parsing errors
           if (onError) {
@@ -55,21 +52,20 @@ export function useWebSocket<T>({
       };
 
       ws.current.onerror = (error) => {
+        setIsConnected(false);
         if (onError) {
           onError(error);
         }
-        setIsLoading(false);
       };
 
       ws.current.onclose = (event) => {
+        setIsConnected(false);
         console.log(
           'Disconnected from WebSocket server',
           event.code,
           event.reason
         );
         ws.current = null;
-        setIsLoading(true);
-
         if (onClose) {
           onClose(event);
         }
@@ -79,7 +75,7 @@ export function useWebSocket<T>({
         }
       };
     };
-  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoading]);
+  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoading, setIsConnected]);
 
   // Initialize WebSocket connection
   useEffect(() => {
