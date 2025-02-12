@@ -5,7 +5,7 @@ import { ChatMessage, useChatStore } from '../../store/ChatStore';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useAppStore } from '@/store/AppStore';
 import { useCallback } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/shadcn/button';
 
 const schema = z.object({
   message: z.string().min(1, 'Message is required.'),
