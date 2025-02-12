@@ -10,9 +10,9 @@ import {
   FormMessage,
 } from '@/components/shadcn/form';
 import { Input } from '@/components/shadcn/input';
-import { TChatWebSocket } from '@/hooks/useWebSocket';
-import { Button } from '../shadcn/button';
 import { useAppStore } from '@/store/AppStore';
+import { TChatWebSocket } from '@/types/websockets';
+import { Button } from '@/components/shadcn/button';
 const formSchema = z.object({
   message: z.string().min(1, 'Message is required.'),
 });
@@ -36,7 +36,7 @@ const ChatForm = ({ ws }: Props) => {
       setIsLoading(true);
       const payload = {
         message: values.message,
-        type: 'user',
+        type: 1,
       };
       console.log(JSON.stringify(payload));
       if (ws.current) {

@@ -1,4 +1,5 @@
 import { useWebSocketStore } from '@/store/WsStore';
+import { TChatWebSocket } from '@/types/websockets';
 import { useCallback, useEffect, useRef } from 'react';
 
 interface Args<T> {
@@ -9,7 +10,7 @@ interface Args<T> {
   onClose?: (event: CloseEvent) => void;
 }
 
-export type TChatWebSocket = React.RefObject<WebSocket | null>;
+
 
 export function useWebSocket<T>({
   wsAddress,
