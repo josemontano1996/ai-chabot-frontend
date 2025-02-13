@@ -46,14 +46,11 @@ const ChatForm = ({ ws }: Props) => {
 
       appendMessage(message);
 
-      setTimeout(() => {
-        if (ws.current) {
-          ws.current.send(JSON.stringify(message));
-        }
-      }, 5000);
-      // if (ws.current) {
-      //  ws.current.send(JSON.stringify(message));
-      // }
+      if (ws.current) {
+        ws.current.send(JSON.stringify(message));
+      }
+      form.reset();
+    
       // The setIsLoading state to false has to be handled by the ws.onmessage event, as the message is sent asynchronously.
     } catch {
       setError('An error occurred. Please try again.');

@@ -8,12 +8,12 @@ import { useChatMessagesStore } from '@/store/ChatMessagesStore';
 const wsAddress = 'ws://localhost:8080/ws';
 
 const ChatPage = () => {
-  const { messages, setChatMessages } = useChatMessagesStore();
+  const { messages, appendMessage } = useChatMessagesStore();
   const onMessage = useCallback(
-    (updatedHistory: IChatMessage[]) => {
-      setChatMessages(updatedHistory);
+    (incommingMessage: IChatMessage) => {
+      appendMessage(incommingMessage);
     },
-    [setChatMessages]
+    [appendMessage]
   );
 
   const { ws } = useWebSocket({ wsAddress, onMessage });
