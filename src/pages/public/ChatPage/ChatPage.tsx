@@ -5,7 +5,7 @@ import ChatForm from './ChatForm';
 import { MessagesDisplay } from './MessagesDisplay';
 import { useChatMessagesStore } from '@/store/ChatMessagesStore';
 
-const wsAddress = 'ws://localhost:8080/ws';
+const wsAddress = 'ws://localhost:8080/chat';
 
 const ChatPage = () => {
   const { messages, appendMessage } = useChatMessagesStore();
