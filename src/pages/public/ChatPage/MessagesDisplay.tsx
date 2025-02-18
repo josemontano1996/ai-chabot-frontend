@@ -1,6 +1,7 @@
-import { SkeletonPlaceholder } from '@/components/SkeletonPlaceholder';
+import { SkeletonPlaceholder } from '@/components/shared/SkeletonPlaceholder';
 import { useChatMessagesStore } from '@/store/ChatMessagesStore';
 import { useWebSocketStore } from '@/store/WsStore';
+import { SafeHTMLParser } from '@/components/shared/SafeHTMLParser';
 
 export const MessagesDisplay = () => {
   const { messages } = useChatMessagesStore();
@@ -9,16 +10,19 @@ export const MessagesDisplay = () => {
   return (
     <ul className="h-full w-full flex flex-col gap-4 py-2">
       {messages.map((message, i) => {
-        if (message.type > 0) {
+        if (message.code === 1) {
           return (
             <li key={i} className="text-right italic">
               {message.message}
             </li>
           );
         } else {
+          {
+            console.log(message.message);
+          }
           return (
-            <li key={i} className="text-left bg-muted px-2 py-2 rounded-md">
-              {message.message}
+            <li key={i} className="text-left bg-muted px-4 py-6 rounded-md">
+              <SafeHTMLParser htmlString={message.message} />
             </li>
           );
         }

@@ -1,39 +1,44 @@
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useCallback } from 'react';
-import { IChatMessage } from '@/types/chat';
+import { IChatWebSocketResponse } from '@/types/chat';
 import ChatForm from './ChatForm';
 import { MessagesDisplay } from './MessagesDisplay';
 import { useChatMessagesStore } from '@/store/ChatMessagesStore';
+import { useAppStore } from '@/store/AppStore';
+import PublicLayout from '@/components/layouts/PublicLayout/PublicLayout';
 
 const wsAddress = 'ws://localhost:8080/chat';
 
 const ChatPage = () => {
   const { messages, appendMessage } = useChatMessagesStore();
+  useAppStore();
+  const { setError } = useAppStore();
   const onMessage = useCallback(
-    (incommingMessage: IChatMessage) => {
-      appendMessage(incommingMessage);
+    (incommingMessage: IChatWebSocketResponse) => {
+      if (incommingMessage.error) {
+        setError(incommingMessage.error);
+        return;
+      }
+      appendMessage(incommingMessage.payload);
     },
-    [appendMessage]
+    [appendMessage, setError]
   );
 
   const { ws } = useWebSocket({ wsAddress, onMessage });
 
   return (
-    <div className="w-full h-screen grid grid-cols-6 gap-6">
-      <nav className="col-span-2">This is the side nav</nav>
-      <main className="col-span-4 py-6">
-        <section className="max-w-2xl pr-8 space-y-4 flex flex-col items-center justify-between h-full">
-          <h1 className="text-center text-2xl">Chat</h1>
+    <PublicLayout>
+      <section className="max-w-2xl pr-8 space-y-4 flex flex-col items-center justify-between h-full">
+        <h1 className="text-center text-2xl">Chat</h1>
 
-          {messages.length === 0 ? (
-            <h2>Hi, welcome to the chat</h2>
-          ) : (
-            <MessagesDisplay />
-          )}
-          <ChatForm ws={ws} />
-        </section>
-      </main>
-    </div>
+        {messages.length === 0 ? (
+          <h2>Hi, welcome to the chat</h2>
+        ) : (
+          <MessagesDisplay />
+        )}
+        <ChatForm ws={ws} />
+      </section>
+    </PublicLayout>
   );
 };
 
