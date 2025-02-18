@@ -1,13 +1,13 @@
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { useCallback } from 'react';
-import { IChatWebSocketResponse } from '@/types/chat';
-import ChatForm from './ChatForm';
-import { MessagesDisplay } from './MessagesDisplay';
-import { useChatMessagesStore } from '@/store/ChatMessagesStore';
-import { useAppStore } from '@/store/AppStore';
-import PublicLayout from '@/components/layouts/PublicLayout/PublicLayout';
+import { useWebSocket } from "@/hooks/useWebSocket";
+import { useCallback } from "react";
+import { IChatWebSocketResponse } from "@/types/chat";
+import ChatForm from "./ChatForm";
+import { MessagesDisplay } from "./MessagesDisplay";
+import { useChatMessagesStore } from "@/store/ChatMessagesStore";
+import { useAppStore } from "@/store/AppStore";
+import PublicLayout from "@/components/layouts/PublicLayout/PublicLayout";
 
-const wsAddress = 'ws://localhost:8080/chat';
+const wsAddress = "ws://localhost:8080/chat";
 
 const ChatPage = () => {
   const { messages, appendMessage } = useChatMessagesStore();
@@ -21,14 +21,14 @@ const ChatPage = () => {
       }
       appendMessage(incommingMessage.payload);
     },
-    [appendMessage, setError]
+    [appendMessage, setError],
   );
 
   const { ws } = useWebSocket({ wsAddress, onMessage });
 
   return (
     <PublicLayout>
-      <section className="max-w-2xl pr-8 space-y-4 flex flex-col items-center justify-between h-full">
+      <section className="flex h-full w-full max-w-2xl flex-col items-center justify-between space-y-4">
         <h1 className="text-center text-2xl">Chat</h1>
 
         {messages.length === 0 ? (
