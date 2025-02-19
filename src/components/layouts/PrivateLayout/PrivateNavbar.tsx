@@ -7,19 +7,40 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   Sidebar,
+  
 } from "@/components/shadcn/sidebar";
-import { Home } from "lucide-react";
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 
 // Menu items.
 const items = [
   {
-    title: "Public",
+    title: "Home",
     url: "#",
     icon: Home,
   },
+  {
+    title: "Inbox",
+    url: "#",
+    icon: Inbox,
+  },
+  {
+    title: "Calendar",
+    url: "#",
+    icon: Calendar,
+  },
+  {
+    title: "Search",
+    url: "#",
+    icon: Search,
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings,
+  },
 ];
 
-const PublicNavbar = () => {
+const PrivateNavbar = () => {
   return (
     <Sidebar>
       <SidebarContent>
@@ -45,4 +66,4 @@ const PublicNavbar = () => {
   );
 };
 
-export default PublicNavbar;
+export default PrivateNavbar;

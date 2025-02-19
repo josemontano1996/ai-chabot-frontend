@@ -5,7 +5,6 @@ import ChatForm from "./ChatForm";
 import { MessagesDisplay } from "./MessagesDisplay";
 import { useChatMessagesStore } from "@/store/ChatMessagesStore";
 import { useAppStore } from "@/store/AppStore";
-import PublicLayout from "@/components/layouts/PublicLayout/PublicLayout";
 
 const wsAddress = "ws://localhost:8080/chat";
 
@@ -27,7 +26,6 @@ const ChatPage = () => {
   const { ws } = useWebSocket({ wsAddress, onMessage });
 
   return (
-    <PublicLayout>
       <section className="flex h-full w-full max-w-2xl flex-col items-center justify-between space-y-4">
         <h1 className="text-center text-2xl">Chat</h1>
 
@@ -38,7 +36,6 @@ const ChatPage = () => {
         )}
         <ChatForm ws={ws} />
       </section>
-    </PublicLayout>
   );
 };
 

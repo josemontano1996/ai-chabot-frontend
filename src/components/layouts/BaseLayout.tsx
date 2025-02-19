@@ -10,13 +10,12 @@ export const BaseLayout = ({ sideNav, children }: Props) => {
   return (
     <>
       <AppErrorToast />
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={true}>
         <div className="flex h-screen w-full gap-6">
           <nav>{sideNav}</nav>
           <main className="relative h-full w-full max-w-7xl py-12">
-            <div className="absolute left-4 top-4">
-              <SidebarTrigger />
-            </div>
+            <SidebarTrigger />
+            <div className="absolute left-4 top-4"></div>
             <div className="flex h-full w-full flex-col items-center">
               {children}
             </div>

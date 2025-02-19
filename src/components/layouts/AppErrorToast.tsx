@@ -1,18 +1,17 @@
-import { useToast } from '@/hooks/use-toast';
-import { Toaster } from '../shadcn/toaster';
-import { useAppStore } from '@/store/AppStore';
-import { useEffect } from 'react';
-import { ShieldAlert } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "../shadcn/toaster";
+import { useAppStore } from "@/store/AppStore";
+import { useEffect } from "react";
+import { ShieldAlert } from "lucide-react";
 
 const AppErrorToast = () => {
   const { toast } = useToast();
-  let { error } = useAppStore();
-  error = 'Error message';
+  const { error } = useAppStore();
   useEffect(() => {
     if (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
+        variant: "destructive",
+        title: "Error",
         description: <ErrorDescription error={error} />,
       });
     }
@@ -23,7 +22,7 @@ const AppErrorToast = () => {
 
 const ErrorDescription = ({ error }: { error: string }) => {
   return (
-    <div className="flex items-center text-lg gap-2">
+    <div className="flex items-center gap-2 text-lg">
       <ShieldAlert />
       <p>{error}</p>
     </div>
