@@ -16,7 +16,7 @@ import { Button } from '@/components/shadcn/button';
 import { IChatMessage } from '@/types/chat';
 import { useChatMessagesStore } from '@/store/ChatMessagesStore';
 import { SendHorizonal } from 'lucide-react';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 const formSchema = z.object({
   message: z.string().min(1, 'Message is required.'),
 });
@@ -41,19 +41,17 @@ const ChatForm = ({ ws }: Props) => {
       setIsLoading(true);
       const message: IChatMessage = {
         message: values.message,
-        type: 1,
+        code: 1,
       };
 
+      const payload = { payload: message };
       appendMessage(message);
 
-      setTimeout(() => {
-        if (ws.current) {
-          ws.current.send(JSON.stringify(message));
-        }
-      }, 5000);
-      // if (ws.current) {
-      //  ws.current.send(JSON.stringify(message));
-      // }
+      if (ws.current) {
+        ws.current.send(JSON.stringify(payload));
+      }
+      form.reset();
+
       // The setIsLoading state to false has to be handled by the ws.onmessage event, as the message is sent asynchronously.
     } catch {
       setError('An error occurred. Please try again.');
