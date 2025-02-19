@@ -1,6 +1,6 @@
-import { useWebSocketStore } from '@/store/WsStore';
-import { TChatWebSocket } from '@/types/websockets';
-import { useCallback, useEffect, useRef } from 'react';
+import { useWebSocketStore } from "@/store/WsStore";
+import { TChatWebSocket } from "@/types/websockets";
+import { useCallback, useEffect, useRef } from "react";
 
 interface Args<T> {
   wsAddress: string;
@@ -9,6 +9,9 @@ interface Args<T> {
   onOpen?: () => void;
   onClose?: (event: CloseEvent) => void;
 }
+
+const devWSP = "ws";
+const prodWSP = "wss";
 
 export function useWebSocket<T>({
   wsAddress,
@@ -26,10 +29,12 @@ export function useWebSocket<T>({
   const createWebSocketHandler = useCallback(() => {
     // This closure will have access to the `onMessage`, `onError`, `onOpen`, and `onClose` callbacks
     return () => {
-      ws.current = new WebSocket(wsAddress);
+      ws.current = new WebSocket(
+        `${import.meta.env.ENVIRONMENT == "dev" ? devWSP : prodWSP}://${wsAddress}`,
+      );
 
       ws.current.onopen = () => {
-        console.log('Connected to WebSocket server');
+        console.log("Connected to WebSocket server");
         setIsConnected(true);
         if (onOpen) {
           onOpen();
@@ -42,7 +47,7 @@ export function useWebSocket<T>({
           const data = JSON.parse(event.data) as T;
           onMessage(data);
         } catch (error) {
-          console.error('Error parsing WebSocket message:', error); // Log parsing errors
+          console.error("Error parsing WebSocket message:", error); // Log parsing errors
           if (onError) {
             onError(error);
           }
@@ -61,21 +66,29 @@ export function useWebSocket<T>({
       ws.current.onclose = (event) => {
         setIsConnected(false);
         console.log(
-          'Disconnected from WebSocket server',
+          "Disconnected from WebSocket server",
           event.code,
-          event.reason
+          event.reason,
         );
         ws.current = null;
         if (onClose) {
           onClose(event);
         }
         if (!event.wasClean) {
-          console.log('Disconnected, attempting to reconnect...');
+          console.log("Disconnected, attempting to reconnect...");
           setTimeout(createWebSocketHandler(), 3000); // Reconnect using the closure
         }
       };
     };
-  }, [wsAddress, onMessage, onError, onOpen, onClose, setIsLoading, setIsConnected]);
+  }, [
+    wsAddress,
+    onMessage,
+    onError,
+    onOpen,
+    onClose,
+    setIsLoading,
+    setIsConnected,
+  ]);
 
   // Initialize WebSocket connection
   useEffect(() => {
