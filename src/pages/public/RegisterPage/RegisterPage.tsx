@@ -8,6 +8,9 @@ import {
   FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
+import { useNavigateWithState } from "@/hooks/useNavigateWithState";
+import { apiRest } from "@/lib/axios";
+import { useAppStore } from "@/store/AppStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -19,6 +22,8 @@ const loginSchema = z.object({
 });
 
 const RegisterPage = () => {
+  const { setError } = useAppStore();
+  const { onSuccessNavigation } = useNavigateWithState();
   const registerForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,8 +32,15 @@ const RegisterPage = () => {
     },
   });
 
-  const onLogin = (values: z.infer<typeof loginSchema>) => {
+  const onRegister = async (values: z.infer<typeof loginSchema>) => {
     console.log(values);
+    try {
+      const resp = await apiRest.post("/register", values);
+      console.log(resp);
+      onSuccessNavigation("/login", "Registration successful");
+    } catch {
+      setError("An error ocurred, try again later.");
+    }
   };
   return (
     <div className="flex h-screen flex-col items-center justify-center border">
@@ -36,7 +48,7 @@ const RegisterPage = () => {
         <h1 className="text-center text-xl">Register</h1>
         <Form {...registerForm}>
           <form
-            onSubmit={registerForm.handleSubmit(onLogin)}
+            onSubmit={registerForm.handleSubmit(onRegister)}
             className="space-y-6"
           >
             <div className="space-y-4">
@@ -60,7 +72,7 @@ const RegisterPage = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder='min 8 characters'/>
+                      <Input {...field} placeholder="min 8 characters" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

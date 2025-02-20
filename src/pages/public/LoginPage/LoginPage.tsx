@@ -19,7 +19,7 @@ const loginSchema = z.object({
 });
 
 const LoginPage = () => {
-  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -33,7 +33,7 @@ const LoginPage = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center border">
       <section className="w-full max-w-sm space-y-4 rounded-md border px-6 pb-6 pt-8">
-        <h1 className="text-center text-xl">Sign in</h1>
+        <h1 className="text-center text-xl">Login</h1>
         <Form {...loginForm}>
           <form
             onSubmit={loginForm.handleSubmit(onLogin)}
