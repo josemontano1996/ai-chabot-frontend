@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import AppErrorToast from "./AppErrorToast";
 import { SidebarProvider, SidebarTrigger } from "../shadcn/sidebar";
+import AppStatusProvider from '../providers/AppStatusProvider';
 
 interface Props {
   sideNav: ReactNode;
@@ -8,8 +8,7 @@ interface Props {
 }
 export const BaseLayout = ({ sideNav, children }: Props) => {
   return (
-    <>
-      <AppErrorToast />
+    <AppStatusProvider>
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-screen w-full gap-6">
           <nav>{sideNav}</nav>
@@ -22,7 +21,7 @@ export const BaseLayout = ({ sideNav, children }: Props) => {
           </main>
         </div>
       </SidebarProvider>
-    </>
+    </AppStatusProvider>
   );
 };
 //   <div className="w-full h-screen grid grid-cols-6 gap-6">
