@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "./cookies";
+import Cookies from "js-cookie";
 import { authTokenCookieName } from "@/consts/cookies";
 
 export const apiRest = axios.create({
@@ -11,7 +11,7 @@ export const apiRest = axios.create({
 
 apiRest.interceptors.request.use(
   (config) => {
-    const authtoken = getCookie(authTokenCookieName); // Replace with your cookie name
+    const authtoken = Cookies.get(authTokenCookieName); 
 
     if (authtoken) {
       config.headers.Authorization = `Bearer ${authtoken}`;

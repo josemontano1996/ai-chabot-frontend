@@ -10,7 +10,6 @@ interface Props {
 const AppStatusProvider = ({ children }: Props) => {
   const [searchParams] = useSearchParams();
   const { setError, setSuccess } = useAppStore();
-  console.log("ere");
   const successMessage = searchParams.get("success");
   const errorMessage = searchParams.get("error");
   useEffect(() => {
