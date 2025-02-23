@@ -1,4 +1,3 @@
-import AppStatusProvider from "@/components/providers/AppStatusProvider";
 import { Button } from "@/components/shadcn/button";
 import {
   Form,
@@ -32,8 +31,7 @@ const LoginPage = () => {
     console.log(values);
   };
   return (
-    <AppStatusProvider>
-      <div className="flex h-screen flex-col items-center justify-center border">
+      <div className="flex h-screen flex-col items-center justify-center w-full">
         <section className="w-full max-w-sm space-y-4 rounded-md border px-6 pb-6 pt-8">
           <h1 className="text-center text-xl">Login</h1>
           <Form {...loginForm}>
@@ -84,7 +82,6 @@ const LoginPage = () => {
           </div>
         </section>
       </div>
-    </AppStatusProvider>
   );
 };
 

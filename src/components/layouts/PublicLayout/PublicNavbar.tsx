@@ -8,7 +8,8 @@ import {
   SidebarMenuButton,
   Sidebar,
 } from "@/components/shadcn/sidebar";
-import { Home } from "lucide-react";
+import { Home, KeyRound, UserPlus } from "lucide-react";
+import { Link } from "react-router";
 
 // Menu items.
 const items = [
@@ -17,6 +18,11 @@ const items = [
     url: "#",
     icon: Home,
   },
+];
+
+const auth = [
+  { title: "Log in", url: "/login", icon: KeyRound },
+  { title: "Register", url: "/register", icon: UserPlus },
 ];
 
 const PublicNavbar = () => {
@@ -34,6 +40,17 @@ const PublicNavbar = () => {
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+              <h2>Authentication</h2>
+              {auth.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
