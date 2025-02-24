@@ -6,7 +6,7 @@ import { MessagesDisplay } from "./MessagesDisplay";
 import { useChatMessagesStore } from "@/store/ChatMessagesStore";
 import { useAppStore } from "@/store/AppStore";
 
-const wsAddress = "ws://localhost:8080/chat";
+const wsAddress = "localhost:8080/api/private/ws/chat";
 
 const ChatPage = () => {
   const { messages, appendMessage } = useChatMessagesStore();

@@ -1,3 +1,4 @@
+import { Separator } from "@/components/shadcn/separator";
 import {
   SidebarContent,
   SidebarGroup,
@@ -7,9 +8,10 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   Sidebar,
-  
 } from "@/components/shadcn/sidebar";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Home, LogOut, Settings } from "lucide-react";
+import { useNavigate } from "react-router";
 
 // Menu items.
 const items = [
@@ -19,28 +21,26 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
+    title: "Account",
     url: "#",
     icon: Settings,
   },
 ];
 
+const logoutText = {
+  title: "Log out",
+  icon: LogOut,
+};
+
 const PrivateNavbar = () => {
+  const { removeAuthToken } = useAuth();
+  const navigate = useNavigate();
+  const onLogout = () => {
+    removeAuthToken();
+    navigate("/", {
+      replace: true,
+    });
+  };
   return (
     <Sidebar>
       <SidebarContent>
@@ -58,6 +58,13 @@ const PrivateNavbar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <Separator />
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={onLogout} className='mt-2'>
+                  <logoutText.icon />
+                  <span>{logoutText.title}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

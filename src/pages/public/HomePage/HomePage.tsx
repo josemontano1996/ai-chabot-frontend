@@ -1,10 +1,7 @@
-import PublicLayout from '@/components/layouts/PublicLayout/PublicLayout';
 
 const HomePage = () => {
   return (
-    <PublicLayout>
-      <div>Hola</div>
-    </PublicLayout>
+      <div>Public layer</div>
   );
 };
 
