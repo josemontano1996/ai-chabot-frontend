@@ -49,7 +49,8 @@ const LoginPage = () => {
       }
       saveUserToken(data.payload);
       navigate("/private");
-    } catch {
+    } catch (e) {
+      console.error(e);
       setError("Invalid credentials");
     }
   };

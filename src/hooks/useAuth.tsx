@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export const authCookie = "authtoken";
+export const authCookie = "authorization";
 
 export const useAuth = () => {
   const isAuthenticated = Cookies.get(authCookie) ? true : false;
