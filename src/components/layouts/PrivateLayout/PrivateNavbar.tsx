@@ -22,7 +22,7 @@ const items = [
   },
   {
     title: "Account",
-    url: "#",
+    url: "/private/user",
     icon: Settings,
   },
 ];
@@ -60,7 +60,7 @@ const PrivateNavbar = () => {
               ))}
               <Separator />
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={onLogout} className='mt-2'>
+                <SidebarMenuButton onClick={onLogout} className="mt-2">
                   <logoutText.icon />
                   <span>{logoutText.title}</span>
                 </SidebarMenuButton>
