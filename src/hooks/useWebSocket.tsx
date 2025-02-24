@@ -30,7 +30,7 @@ export function useWebSocket<T>({
     // This closure will have access to the `onMessage`, `onError`, `onOpen`, and `onClose` callbacks
     return () => {
       ws.current = new WebSocket(
-        `${import.meta.env.ENVIRONMENT == "dev" ? devWSP : prodWSP}://${wsAddress}`,
+        `${import.meta.env.VITE_ENVIRONMENT == "dev" ? devWSP : prodWSP}://${wsAddress}`,
       );
 
       ws.current.onopen = () => {

@@ -8,14 +8,13 @@ import {
   FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
-import { authTokenCookieName } from "@/consts/cookies";
 import { apiRest } from "@/lib/axios";
 import { useAppStore } from "@/store/AppStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { z } from "zod";
-import Cookies from "js-cookie";
+import { useAuth } from "@/hooks/useAuth";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -28,6 +27,8 @@ interface loginResponse {
 
 const LoginPage = () => {
   const { setError } = useAppStore();
+  const { saveUserToken } = useAuth();
+  const navigate = useNavigate();
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -46,7 +47,8 @@ const LoginPage = () => {
         );
         return;
       }
-      Cookies.set(authTokenCookieName, data.payload);
+      saveUserToken(data.payload);
+      navigate("/private");
     } catch {
       setError("Invalid credentials");
     }

@@ -1,9 +1,10 @@
 import PrivateLayout from "@/components/layouts/PrivateLayout/PrivateLayout";
 import { Navigate, Outlet } from "react-router";
+import { useAuth } from "@/hooks/useAuth";
 
 const PrivateGuard = () => {
-  const authenticated = true;
-  return authenticated ? (
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? (
     <PrivateLayout>
       <Outlet />
     </PrivateLayout>
