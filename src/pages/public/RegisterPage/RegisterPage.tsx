@@ -71,7 +71,11 @@ const RegisterPage = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="min 8 characters" />
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="min 8 characters"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
