@@ -16,10 +16,16 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { z } from "zod";
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+const loginSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 const RegisterPage = () => {
   const { setError } = useAppStore();
@@ -29,6 +35,7 @@ const RegisterPage = () => {
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -70,6 +77,23 @@ const RegisterPage = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="min 8 characters"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={registerForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm password</FormLabel>
                     <FormControl>
                       <Input
                         {...field}

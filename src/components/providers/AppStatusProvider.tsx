@@ -1,17 +1,22 @@
 import { ReactNode, useEffect } from "react";
-import AppErrorToast from "../shared/AppErrorToast";
 import { useSearchParams } from "react-router";
 import AppSuccessToast from "../shared/AppSuccessToast";
 import { useAppStore } from "@/store/AppStore";
+import AppErrorAlert from "../shared/AppErrorToastAlert";
 
 interface Props {
   children: ReactNode;
 }
 const AppStatusProvider = ({ children }: Props) => {
   const [searchParams] = useSearchParams();
-  const { setError, setSuccess } = useAppStore();
+  const { setError, setSuccess, clearError, clearSuccess } = useAppStore();
   const successMessage = searchParams.get("success");
   const errorMessage = searchParams.get("error");
+  useEffect(() => {
+    clearError();
+    clearSuccess();
+  }, [clearError, clearSuccess]);
+  
   useEffect(() => {
     if (successMessage) {
       setSuccess(successMessage);
@@ -25,7 +30,7 @@ const AppStatusProvider = ({ children }: Props) => {
   return (
     <div>
       <AppSuccessToast />
-      <AppErrorToast />
+      <AppErrorAlert />
       {children}
     </div>
   );
