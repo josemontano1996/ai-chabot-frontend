@@ -1,31 +1,21 @@
-import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "../shadcn/toaster";
 import { useAppStore } from "@/store/AppStore";
-import { useEffect } from "react";
-import { CircleCheck } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "../shadcn/alert";
 
 const AppSuccessToast = () => {
-  const { toast } = useToast();
-  const { success } = useAppStore();
-  useEffect(() => {
-    if (success) {
-      toast({
-        variant: "default",
-        title: "Success",
-        description: <SuccessDescription message={success} />,
-      });
-    }
-  }, [success, toast]);
+  const { success, clearSuccess } = useAppStore();
 
-  return <Toaster />;
-};
-
-const SuccessDescription = ({ message }: { message: string }) => {
   return (
-    <div className="flex items-center gap-2 text-lg text-primary">
-      <CircleCheck className="border-primary" />
-      <p>{message}</p>
-    </div>
+    success && (
+      <Alert
+        className="absolute bottom-4 right-4 z-[99] w-[400px] max-w-[95vw] border-primary bg-white text-primary hover:cursor-pointer"
+        onClick={clearSuccess}
+      >
+        <ShieldAlert className="h-4 w-4" color="green" />
+        <AlertTitle>Succes</AlertTitle>
+        <AlertDescription>{success}</AlertDescription>
+      </Alert>
+    )
   );
 };
 

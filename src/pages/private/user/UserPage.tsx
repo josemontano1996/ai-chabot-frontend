@@ -10,12 +10,13 @@ import {
   TabsTrigger,
 } from "@/components/shadcn/tabs";
 import { SkeletonPlaceholder } from "@/components/shared/SkeletonPlaceholder";
+import { DeleteUserForm } from "./DeleteUserForm";
 
 interface apiData {
   payload: IUser;
 }
 const UserPage = () => {
-  const [user, setUser] = useState<IUser|null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const { setError } = useAppStore();
 
   useEffect(() => {
@@ -34,12 +35,10 @@ const UserPage = () => {
     fetchUser();
   }, [setError]);
 
- 
-
   return (
     <section>
       <h1 className="my-4 text-center text-3xl">Account management</h1>
-      <Tabs defaultValue="update" className="w-full">
+      <Tabs defaultValue="update" className="w-full max-w-2xl">
         <TabsList className="flex w-full justify-evenly">
           <TabsTrigger value="update">Update account</TabsTrigger>
           <TabsTrigger value="delete">Delete account</TabsTrigger>
@@ -47,7 +46,9 @@ const UserPage = () => {
         <TabsContent value="update">
           {user ? <UpdateUserForm user={user} /> : <SkeletonPlaceholder />}
         </TabsContent>
-        <TabsContent value="delete">Change your password here.</TabsContent>
+        <TabsContent value="delete">
+          <DeleteUserForm />
+        </TabsContent>
       </Tabs>
     </section>
   );
