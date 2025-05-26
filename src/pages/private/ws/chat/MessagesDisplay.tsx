@@ -8,7 +8,7 @@ export const MessagesDisplay = () => {
   const { isLoading } = useWebSocketStore();
   console.log(messages);
   return (
-    <ul className="h-full w-full flex flex-col gap-4 py-2">
+    <ul className="overflow-auto w-full flex flex-col gap-4 py-2">
       {messages.map((message, i) => {
         if (message.code === 1) {
           return (

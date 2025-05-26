@@ -26,7 +26,7 @@ const ChatPage = () => {
   const { ws } = useWebSocket({ wsAddress, onMessage });
 
   return (
-      <section className="flex h-full w-full max-w-2xl flex-col items-center justify-between space-y-4">
+      <section className="flex min-h-full w-full max-w-2xl flex-col items-center justify-between space-y-4">
         <h1 className="text-center text-2xl">Chat</h1>
 
         {messages.length === 0 ? (
